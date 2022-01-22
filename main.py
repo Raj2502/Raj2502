@@ -1,158 +1,104 @@
-from selenium import webdriver
-import time
-from selenium.webdriver.chrome.options import Options
-from selenium.webdriver.common.keys import Keys
-from selenium.common.exceptions import NoSuchElementException
-from selenium.webdriver.support.ui import Select
-from selenium.webdriver import ActionChains
+import tkinter as tk
+from tkinter import *
+from tkinter import ttk
+from csv import DictWriter
+import os
+from tkinter import messagebox
 
-options_obj = Options()
-options_obj.add_argument("start-maximized")
-options_obj.add_argument("--disable-extensions")
+root = Tk()
+root.title('Student Record System')
+root.geometry("300x300")
 
-wd_chrome = webdriver.Chrome(options=options_obj, executable_path="R:\chromedriver.exe")
-wd_chrome.get("https://www.thesparksfoundationsingapore.org/")
-print("\nTest Cases")
+#creating  labels
 
-# TestCase1: Checking for the logo of the webpage
-print("\nTestCase 1:")
-logo = wd_chrome.find_element_by_xpath('//*[@id="home"]/div/div[1]/h1/a/img')
-if logo.is_displayed():
-    print("Successful : Logo is Present!!\n")
-    time.sleep(2)
-else:
-    print("Logo is not visible!!\n")
+label_head = tk.Label(root,text='Student Record System')
+label_head.grid(row=0,column=0)
 
-# TestCase2: Checking for the parameter 'nav'
-print("TestCase 2:")
-try:
-    wd_chrome.find_element_by_tag_name('nav')
-    print("Verification of navigation bar has been done successfully!!\n")
-except NoSuchElementException:
-    print("Failed in Verifying of navigation bar!!\n")
+label1 = ttk.Label(root,text="Enter Your Name :")
+label1.grid(row=1,column=0,sticky=tk.W)
 
-# TestCase3: checking for 'About Us'
-print("TestCase 3:")
-try:
-    wd_chrome.find_element_by_xpath('//*[@id="link-effect-3"]/ul/li[1]/a').click()
-    time.sleep(2)
-    wd_chrome.find_element_by_xpath('//*[@id="link-effect-3"]/ul/li[1]/ul/li[1]/a').click()
-    time.sleep(3)
-    print('About Us Page is visited Successfully!!\n')
-except NoSuchElementException:
-    print("Failed to visit About Us Page!!\n")
-    time.sleep(3)
+label2 = tk.Label(root,text="Enter Your Email :")
+label2.grid(row=2,column=0,sticky=tk.W)
 
-# TestCase4: Checking for the parameter 'Home'
-print("TestCase 4:")
-try:
-    wd_chrome.find_element_by_partial_link_text("The Sparks Foundation").click()
-    print("Home link is working Successfully!!!\n")
-except NoSuchElementException:
-    print("Home Link is not Working!\n")
+label3 = tk.Label(root,text="Enter Your Age :")
+label3.grid(row=3,column=0,sticky=tk.W)
 
-# TestCase5: Verifying the parameter 'Title'
-print("TestCase 5:")
-if wd_chrome.title:
-    print("Title has been verified Successfully: ", wd_chrome.title)
-else:
-    print("Title Verification Failed!!")
+label4 = tk.Label(root,text="Select Your gender :")
+label4.grid(row=4,column=0,sticky=tk.W)
 
-# TestCase 6: Checking Policy page
-print('\nTestCase 6:')
-try:
-    wd_chrome.find_element_by_link_text('Policies and Code').click()
-    time.sleep(3)
-    wd_chrome.find_element_by_link_text("Policies").click()
-    time.sleep(2)
-    wd_chrome.find_element_by_link_text('Code of Ethics and Conduct').click()
-    time.sleep(2)
-    print('Policy Page Verified!\n')
-except NoSuchElementException:
-    print('No New Tab opened. Failed!\n')
 
-# TestCase7: Programs page
-print('TestCase 7:')
-try:
-    wd_chrome.find_element_by_link_text('Programs').click()
-    time.sleep(3)
-    wd_chrome.find_element_by_link_text('Student Scholarship Program').click()
-    time.sleep(3)
-    wd_chrome.find_element_by_link_text("Student Mentorship Program").click()
-    time.sleep(3)
-    wd_chrome.find_element_by_link_text('Student SOS Program').click()
-    time.sleep(3)
-    wd_chrome.find_element_by_link_text('Workshops').click()
-    time.sleep(3)
-    wd_chrome.find_element_by_link_text('Corporate Programs').click()
-    time.sleep(3)
-    print('Programs Page is Verified!!\n')
-except NoSuchElementException:
-    print('Failed to verify Programs page!\n')
+#  Creating Entry box 
 
-# TestCase8 : verifying Links Page
-print("TestCase 8:")
-try:
-    wd_chrome.find_element_by_link_text('LINKS').click()
-    time.sleep(2)
-    wd_chrome.find_element_by_link_text('Software & App').click()
-    time.sleep(2)
-    wd_chrome.find_element_by_link_text('AI in Education').click()
-    time.sleep(2)
-    print('Successfully verified links page!!\n')
-except NoSuchElementException:
-    print("Links page Verification Failed!\n")
+entrybox_1_var = tk.StringVar()
+entrybox_1 = ttk.Entry(root, width = 16, textvariable = entrybox_1_var)
+entrybox_1.grid(row=1,column=1,sticky=tk.W)
+entrybox_1.focus()
 
-# Testcase9 : Checking for the parameter 'Join Us'
-print('TestCase 9:')
-try:
-    join_us = wd_chrome.find_element_by_xpath('//*[@id="link-effect-3"]/ul/li[5]/a')
-    join_us.click()
-    time.sleep(2)
-    why_join_us = wd_chrome.get('https://www.thesparksfoundationsingapore.org/join-us/why-join-us/')
-    time.sleep(2)
-    name = wd_chrome.find_element_by_xpath('/html/body/div[2]/div/div[2]/div[2]/div/form/input[1]')
-    email = wd_chrome.find_element_by_xpath('/html/body/div[2]/div/div[2]/div[2]/div/form/input[2]')
-    role = wd_chrome.find_element_by_xpath('/html/body/div[2]/div/div[2]/div[2]/div/form/select')
+entrybox_2_var = tk.StringVar()
+entrybox_2 = tk.Entry(root, width = 16, textvariable = entrybox_2_var)
+entrybox_2.grid(row=2,column=1,sticky=tk.W)
 
-    # Scrolling Action
-    wd_chrome.execute_script("window.scrollBy(0,500)", name)
-    time.sleep(2)
+entrybox_3_var = tk.StringVar()
+entrybox_3 = tk.Entry(root, width = 16, textvariable = entrybox_3_var)
+entrybox_3.grid(row=3,column=1,sticky=tk.W)
 
-    name.send_keys('Raj kamble')
-    time.sleep(2)
+#creating combobox
+gender_var = tk.StringVar()
+gender_combobox = ttk.Combobox(root,width=13, textvariable = gender_var, state='readonly')
+gender_combobox['values']= ('Male','Female','Other')
+gender_combobox.current(0)
+gender_combobox.grid(row=4,column=1)
 
-    email.send_keys('rjkamble439@gmail.com')
-    time.sleep(2)
+# creating radio button 
 
-    choose = Select(role)
-    choose.select_by_visible_text('Student')
-    print('Join US page is visited and Form filled successfully\n')
-except:
-    print('Join US page is not visited\n')
+usertype = StringVar() 
+radio_btn1 = ttk.Radiobutton(root,text='Student',value='Student',variable=usertype)
+radio_btn1.grid(row=5,column=0)
 
-time.sleep(3)
+radio_btn2 = ttk.Radiobutton(root,text='Teacher',value='Teacher',variable=usertype)
+radio_btn2.grid(row=5,column=1)
 
-# TestCase10 : Checking for the Contact Us Page
-print("TestCase 10:")
-try:
-    wd_chrome.find_element_by_link_text("Contact Us").click()
-    time.sleep(2)
-    info = wd_chrome.find_element_by_xpath('/html/body/div[2]/div/div/div[3]/div[2]/p[2]')
-    time.sleep(2)
+#creating check button
+checkvar = IntVar()
+check_btn = ttk.Checkbutton(root,text='check if you want to Subscribe to our newsletter',variable=checkvar)
+check_btn.grid(row=6, columnspan=3)
 
-    # print(info.text)
-    if info.text == "+65-8402-8590, info@thesparksfoundation.sg":
-        print('Contact Information is Correct!')
+def action():
+    user_name = entrybox_1_var.get() 
+    user_email = entrybox_2_var.get()
+    user_age = entrybox_3_var.get()
+    gender_vari = gender_var.get()
+    user_type = usertype.get()
+    if checkvar.get()==0:
+        Subscribed = 'No'
     else:
-        print('Incorrect! Information')
-    print("Contact Page Verification ha done Successfully!\n")
-    wd_chrome.execute_script("window.scrollBy(0,350)", "")
-    time.sleep(2)
-    wd_chrome.execute_script("window.scrollBy(0,350)", "")
-    time.sleep(2)
-    wd_chrome.execute_script("window.scrollBy(0,350)", "")
-    time.sleep(2)
-    wd_chrome.execute_script("window.scrollBy(0,100)", "")
-except NoSuchElementException:
-    print("Contact Page Verification Unsuccessful!")
+        Subscribed = 'yes'
+    
+ 
+# writing to csv file
+
+    with open("st_records.csv",'a', newline='') as f:
+        dict_writer = DictWriter(f, fieldnames=['UserName','User email address','User age','User gender','User type','subscribed'])
+
+        if os.stat("st_records.csv").st_size==0: #checks if file contains the header or not
+            DictWriter.writeheader(dict_writer)
+
+        dict_writer.writerow({'UserName': user_name,'User email address': user_email, 'User age': user_age,'User gender': gender_vari,'User type': user_type,'subscribed':Subscribed })
+
+        messagebox.showinfo('Message','Record added Sucessfully')  #creating message box
+
+
+
+    name =  entrybox_1.delete(0,tk.END)
+    age = entrybox_2.delete(0,tk.END)
+    email = entrybox_3.delete(0,tk.END)
+    label1.configure(foreground='Blue')
+
+
+
+#creating buttons
+submit_btn = tk.Button(root,text='Submit', command= action)
+submit_btn.grid(row=8,columnspan=3)
+
+
+root.mainloop()    
